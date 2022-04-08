@@ -10,12 +10,12 @@ const Course = ({ courses }) => {
     <div>
 
       {courses.map((course) =>
-          <div>
-            <h1>{course.name}</h1>
+          <div key={'course-' + course.name}>
+            <h1 key={'header-' + course.name}>{course.name}</h1>
 
-            {course.parts.map((part) => 
-              <div>
-                <p>{part.name} {part.exercises}</p>
+            {course.parts.map((part, idx) => 
+              <div key={'course-part-' + idx}>
+                <p key={'p-' + idx + part.name}>{part.name} {part.exercises}</p>
               </div>
             )}
 
