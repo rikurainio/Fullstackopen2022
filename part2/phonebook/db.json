@@ -1,24 +1,39 @@
 {
-  "persons":[
-    { 
-      "name": "Arto Hellas", 
-      "number": "040-123456",
-      "id": 1
-    },
-    { 
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    { 
-      "name": "Dan Abramov", 
+  "persons": [
+    {
+      "name": "Dan Abramov",
       "number": "12-43-234345",
       "id": 3
     },
-    { 
-      "name": "Mary Poppendieck", 
+    {
+      "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
+    },
+    {
+      "name": "Riku Rainio",
+      "number": "12-22-4000405",
+      "id": 6
+    },
+    {
+      "name": "Toni Hannula",
+      "number": "42-51-4156636",
+      "id": 7
+    },
+    {
+      "name": "Jamppa Jamppari",
+      "number": "21-51-6267345",
+      "id": 9
+    },
+    {
+      "name": "Pihla X9",
+      "number": "61-15-523774",
+      "id": 10
+    },
+    {
+      "name": "Juha Tauriainen",
+      "number": "12-12-122112",
+      "id": 11
     }
   ]
 }

@@ -1,0 +1,29 @@
+.error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 50px;
+    color: red;
+    border: 3px solid red;
+    border-radius: 7px;
+    margin-bottom: 20px;
+    background-color: #cccccc
+}
+
+.success {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 50px;
+    color: green;
+    border: 3px solid green;
+    border-radius: 7px;
+    margin-bottom: 20px;
+    background-color: #cccccc
+}
+
+.notificationText {
+    padding-left: 10px;
+    font-size: 24px;
+    font-weight: 500;
+}

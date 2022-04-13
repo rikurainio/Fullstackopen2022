@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personService from './components/Axios'
+import './App.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -7,14 +9,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
 
   const [filter, setFilter] = useState('')
-
+  const [message, setMessage] = useState(null)
+  const [type, setType] = useState(null)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then((res) => {
-        setPersons(res.data)
-      })
+    personService
+      .getAll()
+      .then((res) => setPersons(res))
   },[])
 
   const handleNameChange = (event) => {
@@ -31,23 +32,79 @@ const App = () => {
     e.preventDefault()
 
     if(persons.filter(person => person.name === newName).length > 0){
-      const expression = `${newName} is already added to phonebook`
-      window.alert(expression)
-    }
-    if(persons.filter(person => person.number === newNumber).length > 0){
-      const expression = `${newNumber} is already added to phonebook`
-      window.alert(expression)
+      updatePerson()
+
+      setType('success')
+      setMessage('Updated ' + newName)
+      clearMessage()
     }
 
     else{
       const personsCopy = [...persons]
       personsCopy.push({name: newName, number: newNumber})
       setPersons(personsCopy)
+
+      personService.create({name: newName, number: newNumber})
+      setType('success')
+      setMessage('Added ' + newName)
+      clearMessage()
     }
     clearInputFields()
-  
   }
   
+  function removePerson(personName){
+    if(window.confirm('Delete ' + personName + '?')){
+      const foundPerson = persons.filter(person => person.name === personName)
+      //const updatedPersons = persons.filter(person => person.name !== personName)
+      //setPersons(updatedPersons)
+
+      const removeId = foundPerson[0].id
+      personService.remove(removeId)
+        .then(res => {
+          setType('success')
+          setMessage('Deleted ' + personName)
+
+          const personsUpdated = persons.filter(person => person.name !== personName)
+          setPersons(personsUpdated)
+        })
+        .catch(err => {
+          console.log('err frontend: ', err)
+          setType('error')
+          setMessage('Information of ' + personName + ' has already been removed from the server')
+
+          const idx = persons.findIndex(person => person.name === personName)
+          const personsUpdated = persons.filter(person => person.name !== personName)
+          setPersons(personsUpdated)
+        })
+
+      clearMessage()
+    }
+  }
+
+  function clearMessage(){
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
+
+  function updatePerson(){
+
+    if(window.confirm(newName + ' is already added to phonenbook, replace the old number with a new one?')){
+      const updatedPerson = {
+        name: newName,
+        number: newNumber
+      }
+
+      const id = persons.filter(person => person.name === newName)[0].id
+
+      personService
+        .update(id, updatedPerson)
+        .then(() => personService
+          .getAll()
+          .then((res) => setPersons(res)))
+    }
+  }
+
   function clearInputFields(){
     setNewName('')
     setNewNumber('')
@@ -55,8 +112,9 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
-     
+      <h1>Phonebook</h1>
+      <Notification message={message} type={type}/>
+
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
 
       <h3>add a new</h3>
@@ -71,7 +129,12 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={persons} filter={filter}/>
+      <Persons
+        persons={persons}
+        filter={filter}
+        removePerson={removePerson}
+        
+        />
 
     </div>
   )
@@ -103,12 +166,36 @@ const PersonForm = ({newName, newNumber, handleNameChange, handleNumberChange, a
   )
 }
 
-const Persons = ({ persons, filter }) => {
+const Persons = ({ persons, filter, removePerson }) => {
   return (
     <div>
-      {persons.filter(person => person.name.includes(filter)).map(filteredPerson => (<p>{filteredPerson.name}</p>))}
+      {persons
+        .filter(person => person.name.includes(filter))
+        .map((filteredPerson, idx) => (<div key={'person-' + idx}><p>{filteredPerson.name + ' '}
+                                   {filteredPerson.number + ' '} 
+                                   <button onClick={() => removePerson(filteredPerson.name)}>delete</button></p></div>))}
     </div>
   )
+}
+
+const Notification = ({ message, type}) => {
+  if(message === null){
+    return null
+  }
+  if(type === 'error'){
+    return (
+      <div className='error'>
+        <p className='notificationText'>{message}</p>
+      </div>
+    )
+  }
+  if(type === 'success'){
+    return (
+      <div className='success'>
+        <p className='notificationText'>{message}</p>
+      </div>
+    )
+  }
 }
 
 export default App
