@@ -1,0 +1,6 @@
+[submodule "Fullstackopen2022-2"]
+	path = Fullstackopen2022-2
+	url = https://github.com/rikurainio/Fullstackopen2022-2
+[submodule "part3-fso"]
+	path = part3-fso
+	url = https://github.com/rikurainio/part3-fso
