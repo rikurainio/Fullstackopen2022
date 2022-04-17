@@ -44,7 +44,18 @@ const App = () => {
       personsCopy.push({name: newName, number: newNumber})
       setPersons(personsCopy)
 
+      console.log('creating: ', newName, newNumber)
+
       personService.create({name: newName, number: newNumber})
+        .then(createdPerson => {
+          console.log('created: ', createdPerson)
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          setType('error')
+          setMessage(error.response.data.error)
+        })
+
       setType('success')
       setMessage('Added ' + newName)
       clearMessage()
@@ -59,8 +70,10 @@ const App = () => {
       //setPersons(updatedPersons)
 
       const removeId = foundPerson[0].id
+      console.log('remove id in frontend is: ', removeId)
       personService.remove(removeId)
         .then(res => {
+          console.log('deleted: ', res)
           setType('success')
           setMessage('Deleted ' + personName)
 
@@ -96,6 +109,7 @@ const App = () => {
       }
 
       const id = persons.filter(person => person.name === newName)[0].id
+      console.log('updated person pre put is: ', updatedPerson)
 
       personService
         .update(id, updatedPerson)
