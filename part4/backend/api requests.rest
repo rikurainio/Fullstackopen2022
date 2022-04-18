@@ -1,0 +1,39 @@
+
+
+
+
+
+// CREATE USER
+POST http://[::1]:3001/api/users
+
+content-type: 'application/json'
+
+{
+    "username": "rhan",
+    "name": "rhani",
+    "password": "rhanlol",
+    "blogs": []
+}
+
+// LOGIN
+POST http://[::1]:3001/api/login
+
+Content-Type: application/json
+
+{
+    "username": "rhan",
+    "password": "rhanlol"
+}
+
+// POST BLOGS AFTER LOGIN
+POST http://[::1]:3001/api/blogs
+
+Content-Type: application/json
+Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
+
+{
+	"title": "InsomniaTest",
+	"author": "Insmoniamain",
+	"url": "http: //tester.com/test.html",
+	"likes": 1
+}
